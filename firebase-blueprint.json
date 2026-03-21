@@ -1,0 +1,59 @@
+{
+  "entities": {
+    "Registration": {
+      "title": "Registration",
+      "description": "Student registration for events",
+      "type": "object",
+      "properties": {
+        "fullName": { "type": "string", "description": "Full name of the student" },
+        "collegeName": { "type": "string", "description": "College name" },
+        "branch": { "type": "string", "description": "Branch" },
+        "year": { "type": "string", "description": "Year" },
+        "phoneNumber": { "type": "string", "description": "Phone number" },
+        "email": { "type": "string", "format": "email", "description": "Email address" },
+        "events": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "eventId": { "type": "string" },
+              "subEventId": { "type": "string" },
+              "type": { "type": "string", "enum": ["solo", "team"] },
+              "teamName": { "type": "string" },
+              "teamSize": { "type": "integer" },
+              "members": { "type": "array", "items": { "type": "string" } },
+              "fee": { "type": "number" }
+            }
+          }
+        },
+        "totalAmount": { "type": "number" },
+        "transactionId": { "type": "string" },
+        "paymentScreenshotUrl": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "registrationId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["fullName", "collegeName", "phoneNumber", "email", "events", "totalAmount", "transactionId", "status"]
+    },
+    "Admin": {
+      "title": "Admin",
+      "description": "Admin user details",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string", "enum": ["admin"] }
+      },
+      "required": ["email", "role"]
+    }
+  },
+  "firestore": {
+    "/registrations/{registrationId}": {
+      "schema": "Registration",
+      "description": "Collection of event registrations"
+    },
+    "/admins/{adminId}": {
+      "schema": "Admin",
+      "description": "Collection of admin users"
+    }
+  }
+}

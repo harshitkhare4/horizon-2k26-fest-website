@@ -1,0 +1,7 @@
+{
+  "name": "Horizon 2k26 Cultural Fest",
+  "description": "Official registration and management portal for Horizon 2k26 Cultural Fest (02-04 April 2026).",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

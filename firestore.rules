@@ -1,0 +1,95 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: registrations
+    // Document ID: auto-generated
+    // Fields:
+    //   - fullName: string (required)
+    //   - collegeName: string (required)
+    //   - branch: string (required)
+    //   - year: string (required)
+    //   - phoneNumber: string (required)
+    //   - email: string (required, email format)
+    //   - events: list of objects (required)
+    //   - totalAmount: number (required)
+    //   - transactionId: string (required)
+    //   - paymentScreenshotUrl: string (required)
+    //   - status: string (required, enum: pending, approved, rejected)
+    //   - registrationId: string (required)
+    //   - createdAt: timestamp (required)
+    //
+    // Collection: admins
+    // Document ID: userId
+    // Fields:
+    //   - email: string (required)
+    //   - role: string (required, enum: admin)
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+          request.auth.token.email.endsWith("@horizon.com") ||
+          (request.auth.token.email == "khareharshit862@gmail.com" && request.auth.token.email_verified == true));
+    }
+
+    function isValidEmail(email) {
+      return email is string && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function isValidRegistration(data) {
+      return data.keys().hasAll(['fullName', 'collegeName', 'branch', 'year', 'phoneNumber', 'email', 'events', 'totalAmount', 'transactionId', 'paymentScreenshotUrl', 'status', 'registrationId', 'createdAt']) &&
+        data.fullName is string && data.fullName.size() > 0 && data.fullName.size() < 100 &&
+        data.collegeName is string && data.collegeName.size() > 0 && data.collegeName.size() < 200 &&
+        data.branch is string && data.branch.size() > 0 && data.branch.size() < 100 &&
+        data.year is string && data.year.size() > 0 && data.year.size() < 50 &&
+        data.phoneNumber is string && data.phoneNumber.size() >= 10 && data.phoneNumber.size() <= 15 &&
+        isValidEmail(data.email) &&
+        data.events is list && data.events.size() > 0 &&
+        data.totalAmount is number && data.totalAmount >= 0 &&
+        data.transactionId is string && data.transactionId.size() > 0 &&
+        data.status in ['pending', 'approved', 'rejected'] &&
+        data.registrationId is string &&
+        data.createdAt is timestamp;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /registrations/{regId} {
+      // Anyone can create a registration
+      allow create: if isValidRegistration(request.resource.data) && request.resource.data.status == 'pending';
+      
+      // Only admins can read all registrations
+      allow list: if isAdmin();
+      
+      // Users can read their own registration if they have the ID (or we can use email/phone lookup)
+      // For simplicity, let's allow read if they know the ID for now, or restrict to admin
+      allow get: if isAdmin();
+      
+      // Only admins can update status
+      allow update: if isAdmin() && isValidRegistration(request.resource.data);
+      
+      // No one can delete registrations
+      allow delete: if false;
+    }
+
+    match /admins/{adminId} {
+      allow read: if isAuthenticated() && (request.auth.uid == adminId || isAdmin());
+      allow write: if isAdmin();
+    }
+  }
+}
