@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import { Instagram, Phone, MessageCircle } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 

@@ -6,7 +6,7 @@ import { EventsSection } from './components/Events';
 import { RegistrationForm } from './components/RegistrationForm';
 import { AdminDashboard } from './components/AdminDashboard';
 import { ContactPage } from './components/Contact';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion'; // ✅ FIXED
 
 const HomePage = () => (
   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>

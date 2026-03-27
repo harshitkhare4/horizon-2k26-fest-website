@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Instagram } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion'; // ✅ FIXED
 import { QRCodeSVG } from 'qrcode.react';
 
 export const Navbar = () => {
@@ -21,7 +21,6 @@ export const Navbar = () => {
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         <Link to="/" className="text-2xl font-bold neon-text">HORIZON 2K26</Link>
         
-        {/* Desktop Nav */}
         <div className="hidden md:flex space-x-8">
           {navLinks.map((link) => (
             <Link 
@@ -34,13 +33,11 @@ export const Navbar = () => {
           ))}
         </div>
 
-        {/* Mobile Toggle */}
         <button className="md:hidden text-white" onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
 
-      {/* Mobile Nav */}
       <AnimatePresence>
         {isOpen && (
           <motion.div 
@@ -87,9 +84,6 @@ export const Footer = () => (
           <Instagram size={24} />
         </a>
       </div>
-    </div>
-    <div className="text-center mt-12 text-white/30 text-sm">
-      © 2026 Horizon Cultural Fest. All rights reserved.
     </div>
   </footer>
 );

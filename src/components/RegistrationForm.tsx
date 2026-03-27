@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { EVENTS } from '../constants';
 import { RegistrationEvent } from '../types';
 import { Plus, Trash2, CreditCard, CheckCircle, Loader2, Upload } from 'lucide-react';

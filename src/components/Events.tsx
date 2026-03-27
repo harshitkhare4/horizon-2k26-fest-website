@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import { EVENTS } from '../constants';
 import { Calendar, Users, User, Info } from 'lucide-react';
 
