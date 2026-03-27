@@ -103,10 +103,10 @@ export const ContactPage = () => {
 
             <div className="mt-8 p-6 bg-white/5 rounded-2xl border border-white/10 text-center space-y-2">
               <p className="text-white/40 text-sm uppercase font-bold tracking-widest mb-2">Office Location</p>
-              <p className="text-xl font-bold text-neon-purple">Room No. - F-11</p>
+              <p className="text-xl font-bold text-neon-purple">Room No. - S-28</p>
               <p className="text-white/70">BTIRT Sironja, Sagar</p>
               <p className="text-white/40 text-xs mt-4 italic">
-                Available during Office Time (10:00 AM to 04:00 PM)
+                Available during College Time (10:00 AM to 04:00 PM)
               </p>
             </div>
           </motion.div>
