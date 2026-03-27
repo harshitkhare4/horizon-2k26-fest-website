@@ -5,9 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Horizon 2K26 | Cultural Fest</title>
   </head>
+
   <body>
     <div id="root"></div>
+
+    <!-- ✅ IMPORTANT FIX (React global ensure) -->
+    <script>
+      window.global = window;
+    </script>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-
