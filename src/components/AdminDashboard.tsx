@@ -1,4 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
+
+const _fixReact = React; // 🔥 IMPORTANT FIX (DO NOT REMOVE)
+
 import { motion } from 'framer-motion';
 import { useRegistrations, updateRegistrationStatus } from '../services/firebaseService';
 import { auth } from '../firebase';
@@ -28,7 +31,6 @@ export const AdminDashboard = () => {
 
   const { registrations, loading } = useRegistrations(isAdmin);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterEvent, setFilterEvent] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
   const [selectedReg, setSelectedReg] = useState<Registration | null>(null);
 
@@ -63,11 +65,10 @@ export const AdminDashboard = () => {
     await signOut(auth);
   };
 
-  // 🔥 FIXED: correct param pass
   const handleStatusUpdate = async (reg: Registration, status: 'approved' | 'rejected') => {
     try {
       await updateRegistrationStatus(reg, status);
-    } catch (error) {
+    } catch {
       alert("Failed to update status");
     }
   };
@@ -88,26 +89,6 @@ export const AdminDashboard = () => {
     .filter(r => r.status === 'approved')
     .reduce((acc, curr) => acc + curr.totalAmount, 0);
 
-  const exportCSV = () => {
-    const headers = ['Reg ID', 'Name', 'Email', 'Amount', 'Status'];
-    const rows = filteredData.map(r => [
-      r.registrationId,
-      r.fullName,
-      r.email,
-      r.totalAmount,
-      r.status
-    ]);
-
-    const csvContent = "data:text/csv;charset=utf-8," 
-      + headers.join(",") + "\n" 
-      + rows.map(e => e.join(",")).join("\n");
-
-    const link = document.createElement("a");
-    link.href = encodeURI(csvContent);
-    link.download = "registrations.csv";
-    link.click();
-  };
-
   if (isCheckingAdmin) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -123,6 +104,7 @@ export const AdminDashboard = () => {
           <div className="w-20 h-20 bg-neon-pink/20 rounded-full flex items-center justify-center mx-auto mb-8">
             <Lock className="text-neon-pink" size={32} />
           </div>
+
           <h2 className="text-4xl font-bold mb-2">Admin <span className="neon-text">Portal</span></h2>
 
           <form onSubmit={handleLogin} className="space-y-6 mt-8">
@@ -133,6 +115,7 @@ export const AdminDashboard = () => {
               placeholder="Admin ID"
               required
             />
+
             <input 
               type="password"
               value={password}
@@ -156,7 +139,6 @@ export const AdminDashboard = () => {
   return (
     <div className="min-h-screen pt-32 pb-20 px-6 max-w-7xl mx-auto">
 
-      {/* Header */}
       <div className="flex justify-between mb-10">
         <h2 className="text-4xl font-bold">Admin <span className="neon-text">Dashboard</span></h2>
         <button onClick={handleLogout} className="text-red-500 flex gap-2 items-center">
@@ -164,14 +146,12 @@ export const AdminDashboard = () => {
         </button>
       </div>
 
-      {/* Stats */}
       <div className="grid grid-cols-3 gap-6 mb-10">
         <div className="glass p-6"><Users /> {registrations.length}</div>
         <div className="glass p-6"><TrendingUp /> ₹{totalRevenue}</div>
         <div className="glass p-6"><Calendar /> {registrations.filter(r => r.status === 'pending').length}</div>
       </div>
 
-      {/* Table */}
       <div className="glass">
         <table className="w-full">
           <thead>
@@ -205,7 +185,6 @@ export const AdminDashboard = () => {
         </table>
       </div>
 
-      {/* Modal */}
       {selectedReg && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/90">
           <div className="glass p-8">
