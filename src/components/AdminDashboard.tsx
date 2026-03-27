@@ -1,3 +1,4 @@
+import React from "react";
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useRegistrations, updateRegistrationStatus } from '../services/firebaseService';
