@@ -228,3 +228,5 @@ export const AdminDashboard = () => {
     </div>
   );
 };
+
+const _React = React;
